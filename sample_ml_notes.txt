@@ -1,0 +1,15 @@
+Supervised Learning
+
+Supervised learning is a type of machine learning where the model is trained on labeled data.
+
+There are two main types:
+1. Classification – predicting categories (e.g., spam or not spam)
+2. Regression – predicting continuous values (e.g., house prices)
+
+Common algorithms:
+- Linear Regression
+- Logistic Regression
+- Decision Trees
+- Support Vector Machines
+
+In supervised learning, the dataset contains input features and corresponding output labels.

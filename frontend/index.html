@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Void Edu - AI Learning Assistant</title>
+    <link rel="stylesheet" href="styles.css">
+    <!-- Lucide Icons (Outline/Stroke based) -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="app">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i data-lucide="graduation-cap"></i>
+                    </div>
+                    <div class="logo-text">
+                        <span class="logo-title">Void Edu</span>
+                        <span class="logo-subtitle">AI ChatBot</span>
+                    </div>
+                </div>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <button class="nav-item active" data-tab="chat">
+                    <i data-lucide="message-circle"></i>
+                    <span>Chat</span>
+                </button>
+                <button class="nav-item" data-tab="upload">
+                    <i data-lucide="upload-cloud"></i>
+                    <span>Upload</span>
+                </button>
+                <button class="nav-item" data-tab="quiz">
+                    <i data-lucide="clipboard-list"></i>
+                    <span>Quiz</span>
+                </button>
+                <button class="nav-item" data-tab="questions">
+                    <i data-lucide="help-circle"></i>
+                    <span>Questions</span>
+                </button>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="status-indicator" id="serverStatus">
+                    <i data-lucide="wifi"></i>
+                    <span>Checking...</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Chat Section -->
+            <section id="chat" class="content-section active">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i data-lucide="message-circle"></i>
+                        <h1>Ask Anything</h1>
+                    </div>
+                    <p class="section-desc">Get instant answers from your uploaded study materials</p>
+                </div>
+                
+                <div class="chat-container">
+                    <div class="chat-messages" id="chatMessages">
+                        <div class="welcome-message">
+                            <div class="welcome-icon">
+                                <i data-lucide="sparkles"></i>
+                            </div>
+                            <h2>Welcome to Void Edu</h2>
+                            <p>Upload your study materials and ask me anything about them. I'll help you learn and understand better!</p>
+                            <div class="feature-cards">
+                                <div class="feature-card">
+                                    <i data-lucide="file-text"></i>
+                                    <span>Upload PDFs, DOCX, TXT</span>
+                                </div>
+                                <div class="feature-card">
+                                    <i data-lucide="brain"></i>
+                                    <span>AI-Powered Answers</span>
+                                </div>
+                                <div class="feature-card">
+                                    <i data-lucide="target"></i>
+                                    <span>Generate Quizzes</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <form class="chat-input-container" id="chatForm">
+                        <div class="chat-input-wrapper">
+                            <input type="text" id="questionInput" placeholder="Ask a question about your documents..." autocomplete="off">
+                            <button type="submit" class="send-btn" id="sendBtn">
+                                <i data-lucide="send"></i>
+                            </button>
+                        </div>
+                        <p class="input-hint">Press Enter to send or click the send button</p>
+                    </form>
+                </div>
+            </section>
+
+            <!-- Upload Section -->
+            <section id="upload" class="content-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i data-lucide="upload-cloud"></i>
+                        <h1>Upload Documents</h1>
+                    </div>
+                    <p class="section-desc">Add your study materials to build your knowledge base</p>
+                </div>
+                
+                <div class="upload-container">
+                    <div class="upload-zone" id="dropZone">
+                        <input type="file" id="fileInput" multiple accept=".pdf,.docx,.txt,.md" hidden>
+                        <div class="upload-zone-content">
+                            <div class="upload-icon">
+                                <i data-lucide="cloud-upload"></i>
+                            </div>
+                            <h3>Drag & drop files here</h3>
+                            <p>or <span class="browse-link">browse</span> to select files</p>
+                            <div class="upload-formats">
+                                <span class="format-badge">PDF</span>
+                                <span class="format-badge">DOCX</span>
+                                <span class="format-badge">TXT</span>
+                                <span class="format-badge">MD</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="file-list" id="fileList"></div>
+                    
+                    <div class="upload-actions">
+                        <button class="btn btn-primary" id="uploadBtn" disabled>
+                            <i data-lucide="upload"></i>
+                            <span>Upload Files</span>
+                        </button>
+                        <button class="btn btn-secondary" id="buildKbBtn">
+                            <i data-lucide="database"></i>
+                            <span>Build Knowledge Base</span>
+                        </button>
+                    </div>
+                    
+                    <div class="status-card" id="uploadStatus"></div>
+                </div>
+            </section>
+
+            <!-- Quiz Section -->
+            <section id="quiz" class="content-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i data-lucide="clipboard-list"></i>
+                        <h1>Take a Quiz</h1>
+                    </div>
+                    <p class="section-desc">Test your knowledge with AI-generated quizzes</p>
+                </div>
+                
+                <div class="quiz-container">
+                    <!-- Quiz Creation -->
+                    <div class="quiz-create" id="quizCreate">
+                        <div class="topic-input-group">
+                            <label for="quizTopic">Enter a Topic</label>
+                            <div class="topic-input-wrapper">
+                                <i data-lucide="book-open"></i>
+                                <input type="text" id="quizTopic" placeholder="e.g., Machine Learning, Neural Networks...">
+                            </div>
+                        </div>
+                        <button class="btn btn-primary btn-lg" id="generateQuizBtn">
+                            <i data-lucide="sparkles"></i>
+                            <span>Generate Quiz</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Quiz Questions -->
+                    <div class="quiz-questions-container hidden" id="quizQuestionsContainer">
+                        <div class="quiz-header">
+                            <div class="quiz-info">
+                                <h2 id="quizTopicTitle">Quiz Topic</h2>
+                                <span class="quiz-badge" id="quizProgress">0/10 Questions</span>
+                            </div>
+                            <button class="btn btn-ghost" id="newQuizBtn">
+                                <i data-lucide="refresh-cw"></i>
+                                <span>New Quiz</span>
+                            </button>
+                        </div>
+                        
+                        <div class="questions-list" id="quizQuestions"></div>
+                        
+                        <div class="quiz-submit">
+                            <button class="btn btn-primary btn-lg" id="submitQuizBtn">
+                                <i data-lucide="check-circle"></i>
+                                <span>Submit Quiz</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Quiz Results -->
+                    <div class="quiz-results hidden" id="quizResults">
+                        <div class="results-score">
+                            <div class="score-circle" id="scoreCircle">
+                                <span class="score-value" id="scoreValue">0%</span>
+                            </div>
+                            <h2>Quiz Completed!</h2>
+                            <p id="scoreText">You scored 0 out of 10</p>
+                        </div>
+                        
+                        <div class="results-breakdown" id="resultsBreakdown"></div>
+                        
+                        <button class="btn btn-primary" id="retryQuizBtn">
+                            <i data-lucide="rotate-ccw"></i>
+                            <span>Try Another Quiz</span>
+                        </button>
+                    </div>
+                    
+                    <div class="status-card" id="quizStatus"></div>
+                </div>
+            </section>
+
+            <!-- Questions Section -->
+            <section id="questions" class="content-section">
+                <div class="section-header">
+                    <div class="section-title">
+                        <i data-lucide="help-circle"></i>
+                        <h1>Generate Questions</h1>
+                    </div>
+                    <p class="section-desc">Create practice questions from your study materials</p>
+                </div>
+                
+                <div class="questions-container">
+                    <div class="questions-form">
+                        <div class="form-group">
+                            <label for="questionsTopic">Topic</label>
+                            <div class="input-with-icon">
+                                <i data-lucide="book-open"></i>
+                                <input type="text" id="questionsTopic" placeholder="Enter a topic...">
+                            </div>
+                        </div>
+                        
+                        <button class="btn btn-primary" id="generateQuestionsBtn">
+                            <i data-lucide="wand-2"></i>
+                            <span>Generate Questions</span>
+                        </button>
+                    </div>
+                    
+                    <div class="generated-questions hidden" id="generatedQuestions">
+                        <div class="questions-tabs">
+                            <button class="questions-tab active" data-type="mcq">
+                                <i data-lucide="list-checks"></i>
+                                MCQs (<span id="mcqCount">0</span>)
+                            </button>
+                            <button class="questions-tab" data-type="descriptive">
+                                <i data-lucide="file-text"></i>
+                                Descriptive (<span id="descCount">0</span>)
+                            </button>
+                        </div>
+                        
+                        <div class="questions-content" id="questionsContent"></div>
+                    </div>
+                    
+                    <div class="status-card" id="questionsStatus"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div class="loading-overlay hidden" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner"></div>
+        </div>
+        <p id="loadingText">Loading...</p>
+    </div>
+
+    <!-- Toast Notification -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>
