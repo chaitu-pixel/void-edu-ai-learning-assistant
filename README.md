@@ -1,93 +1,280 @@
-# Void Edu - AI Learning Assistant
+# 🎓 Void Edu – AI Learning Assistant
 
-An AI-powered educational chatbot that uses RAG (Retrieval-Augmented Generation) to answer questions from your study materials.
+An AI-powered educational assistant that uses **Retrieval-Augmented Generation (RAG)** to answer questions from students' study materials.
 
-![Python](https://img.shields.io/badge/Python-3.10+-blue)
-![FastAPI](https://img.shields.io/badge/FastAPI-0.110.0-green)
-![Gemini](https://img.shields.io/badge/AI-Google%20Gemini-orange)
+Void Edu allows students to upload their learning documents and interact with an AI assistant that provides context-aware answers based on the uploaded content. It also supports quiz generation and practice-question generation for self-learning.
 
-## Features
+> **Academic Team Project**
+> My contribution covered the project end-to-end, including frontend development, backend APIs, document processing, RAG implementation, AI integration, vector search, quiz/question generation, testing, and debugging.
 
-- **Document Upload**: Upload PDF, DOCX, or TXT files as study materials
-- **AI Chat**: Ask questions and get contextual answers from your documents
-- **Quiz Generation**: Auto-generate quizzes based on topics from your materials
-- **Question Generation**: Generate practice questions for self-study
-- **Knowledge Base**: Build and manage a vector database of your documents
+---
 
-## Architecture
+## ✨ Features
 
+### 📄 Document Upload
+
+* Upload PDF, DOCX, and TXT study materials.
+* Process uploaded documents and extract their text content.
+
+### 🤖 AI Chat
+
+* Ask questions about uploaded study materials.
+* Generate context-aware answers using RAG.
+* Uses Google Gemini for AI-generated responses.
+
+### 🧠 Retrieval-Augmented Generation
+
+* Documents are divided into smaller text chunks.
+* Text chunks are converted into vector embeddings.
+* FAISS stores and searches the embeddings.
+* Relevant content is retrieved before generating an answer.
+
+### 📝 Quiz Generation
+
+* Generate quizzes based on uploaded study materials.
+* Evaluate quiz answers.
+
+### ❓ Practice Questions
+
+* Generate practice questions for self-study.
+* Questions are generated based on the selected study content.
+
+### 🗂️ Knowledge Base
+
+* Build a searchable knowledge base from uploaded documents.
+* Uses FAISS as the vector store.
+
+---
+
+## 🏗️ Architecture
+
+```text
+                    ┌──────────────────────┐
+                    │      Frontend        │
+                    │   HTML / CSS / JS    │
+                    └──────────┬───────────┘
+                               │
+                               ▼
+                    ┌──────────────────────┐
+                    │      FastAPI         │
+                    │       Backend        │
+                    └──────────┬───────────┘
+                               │
+                ┌──────────────┼──────────────┐
+                │              │              │
+                ▼              ▼              ▼
+        ┌────────────┐  ┌────────────┐  ┌────────────┐
+        │ Document   │  │    RAG     │  │  Gemini AI │
+        │ Processing │  │  Pipeline  │  │    (LLM)   │
+        └────────────┘  └─────┬──────┘  └────────────┘
+                              │
+                              ▼
+                       ┌─────────────┐
+                       │    FAISS    │
+                       │Vector Store │
+                       └─────────────┘
 ```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│    Frontend     │────▶│   FastAPI       │────▶│  Gemini AI      │
-│  (HTML/CSS/JS)  │     │   Backend       │     │  (LLM)          │
-└─────────────────┘     └────────┬────────┘     └─────────────────┘
-                                 │
-                        ┌────────▼────────┐
-                        │   FAISS Index   │
-                        │ (Vector Store)  │
-                        └─────────────────┘
+
+---
+
+## 🔄 How RAG Works
+
+The application follows these main steps:
+
+```text
+Upload Document
+       ↓
+Extract Text
+       ↓
+Split Text into Chunks
+       ↓
+Generate Embeddings
+       ↓
+Store Embeddings in FAISS
+       ↓
+User Asks a Question
+       ↓
+Convert Question into Embedding
+       ↓
+Retrieve Relevant Chunks
+       ↓
+Send Context + Question to Gemini
+       ↓
+Generate Context-Aware Answer
 ```
 
-## Tech Stack
+This approach allows the AI assistant to generate responses based on the user's uploaded study materials rather than relying only on general knowledge.
 
-- **Backend**: FastAPI, Uvicorn
-- **AI/LLM**: Google Gemini (gemma-3-1b-it)
-- **Embeddings**: Sentence Transformers (all-MiniLM-L6-v2)
-- **Vector Store**: FAISS
-- **Document Processing**: PyPDF2, docx2txt
-- **Frontend**: HTML5, CSS3, Vanilla JavaScript, Lucide Icons
+---
 
-## Prerequisites
+## 🛠️ Tech Stack
 
-- Python 3.10 or higher
-- Google Gemini API key
+### Frontend
 
-## Installation
+* HTML5
+* CSS3
+* Vanilla JavaScript
+* Lucide Icons
 
-1. **Clone the repository**
-   ```bash
-   git clone https://github.com/yourusername/void-education.git
-   cd void-education
-   ```
+### Backend
 
-2. **Create a virtual environment**
-   ```bash
-   python -m venv venv
-   
-   # Windows
-   venv\Scripts\activate
-   
-   # Linux/macOS
-   source venv/bin/activate
-   ```
+* Python
+* FastAPI
+* Uvicorn
 
-3. **Install dependencies**
-   ```bash
-   pip install -r requirements.txt
-   ```
+### AI / LLM
 
-4. **Set up environment variables**
-   
-   Create a `.env` file in the root directory:
-   ```env
-   GEMINI_API_KEY=your_gemini_api_key_here
-   ```
+* Google Gemini
 
-## Running the Application
+### Embeddings
 
-### Quick Start (Windows)
+* Sentence Transformers
+* `all-MiniLM-L6-v2`
 
-**Option 1: Batch file**
-```cmd
+### Vector Database
+
+* FAISS
+
+### Document Processing
+
+* PyPDF2
+* docx2txt
+
+---
+
+## 📁 Project Structure
+
+```text
+void-edu-ai-learning-assistant/
+│
+├── app/
+│   ├── main.py
+│   │
+│   ├── api/
+│   │   ├── chat.py
+│   │   ├── documents.py
+│   │   ├── health.py
+│   │   ├── knowledge_base.py
+│   │   ├── questions.py
+│   │   └── quiz.py
+│   │
+│   ├── core/
+│   │   ├── config.py
+│   │   ├── gemini_client.py
+│   │   └── prompts.py
+│   │
+│   ├── models/
+│   │
+│   ├── services/
+│   │   ├── chunker.py
+│   │   ├── document_loader.py
+│   │   ├── embedder.py
+│   │   ├── question_gen.py
+│   │   ├── quiz_eval.py
+│   │   ├── rag.py
+│   │   └── retriever.py
+│   │
+│   └── utils/
+│
+├── frontend/
+│   ├── index.html
+│   ├── styles.css
+│   └── app.js
+│
+├── storage/
+│   ├── faiss/
+│   └── uploads/
+│
+├── requirements.txt
+├── run.sh
+├── run.ps1
+├── run.bat
+└── README.md
+```
+
+---
+
+## ⚙️ Prerequisites
+
+Make sure you have:
+
+* Python 3.10+
+* Git
+* Google Gemini API key
+
+---
+
+## 🚀 Installation
+
+### 1. Clone the repository
+
+```bash
+git clone https://github.com/chaitu-pixel/void-edu-ai-learning-assistant.git
+```
+
+### 2. Navigate to the project
+
+```bash
+cd void-edu-ai-learning-assistant
+```
+
+### 3. Create a virtual environment
+
+```bash
+python -m venv venv
+```
+
+### 4. Activate the virtual environment
+
+**Windows:**
+
+```bash
+venv\Scripts\activate
+```
+
+**Linux/macOS:**
+
+```bash
+source venv/bin/activate
+```
+
+### 5. Install dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 🔐 Environment Variables
+
+Create a `.env` file in the project root:
+
+```env
+GEMINI_API_KEY=your_gemini_api_key_here
+```
+
+**Important:** Never commit your actual API key to GitHub.
+
+---
+
+## ▶️ Running the Application
+
+### Windows
+
+You can use:
+
+```bash
 run.bat
 ```
 
-**Option 2: PowerShell**
-```powershell
+or:
+
+```bash
 .\run.ps1
 ```
 
-### Quick Start (Linux/macOS)
+### Linux/macOS
 
 ```bash
 chmod +x run.sh
@@ -96,88 +283,132 @@ chmod +x run.sh
 
 ### Manual Start
 
-1. **Start the backend server**
-   ```bash
-   uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
-   ```
+Start the FastAPI backend:
 
-2. **Start the frontend server** (in a new terminal)
-   ```bash
-   cd frontend
-   python -m http.server 3000
-   ```
-
-3. **Open your browser**
-   - Frontend: http://localhost:3000
-   - API Docs: http://localhost:8000/docs
-
-## API Endpoints
-
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/health` | GET | Health check |
-| `/api/upload` | POST | Upload documents |
-| `/api/kb/build` | POST | Build knowledge base |
-| `/api/chat` | POST | Chat with AI |
-| `/api/quiz/generate` | POST | Generate quiz |
-| `/api/quiz/evaluate` | POST | Evaluate quiz answers |
-| `/api/questions/generate` | POST | Generate questions |
-
-## Project Structure
-
-```
-void-education/
-├── app/
-│   ├── main.py              # FastAPI app entry point
-│   ├── api/                  # API route handlers
-│   │   ├── chat.py          # Chat endpoint
-│   │   ├── documents.py     # Document upload
-│   │   ├── health.py        # Health check
-│   │   ├── knowledge_base.py # KB management
-│   │   ├── questions.py     # Question generation
-│   │   └── quiz.py          # Quiz endpoints
-│   ├── core/                 # Core utilities
-│   │   ├── config.py        # Configuration
-│   │   ├── gemini_client.py # Gemini API client
-│   │   └── prompts.py       # LLM prompts
-│   ├── models/               # Pydantic models
-│   ├── services/             # Business logic
-│   │   ├── chunker.py       # Text chunking
-│   │   ├── document_loader.py # Document parsing
-│   │   ├── embedder.py      # Text embeddings
-│   │   ├── question_gen.py  # Question generation
-│   │   ├── quiz_eval.py     # Quiz evaluation
-│   │   ├── rag.py           # RAG pipeline
-│   │   └── retriever.py     # Vector retrieval
-│   └── utils/                # Helper utilities
-├── frontend/                 # Web interface
-│   ├── index.html
-│   ├── styles.css
-│   └── app.js
-├── storage/                  # Data storage
-│   ├── faiss/               # Vector index
-│   └── uploads/             # Uploaded files
-├── requirements.txt
-├── run.sh
-└── README.md
+```bash
+uvicorn app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-## Usage
+In another terminal, start the frontend:
 
-1. **Upload Documents**: Go to the Upload tab and drag-drop your study materials
-2. **Build Knowledge Base**: Click "Build Knowledge Base" after uploading
-3. **Ask Questions**: Switch to Chat and ask questions about your documents
-4. **Generate Quiz**: Go to Quiz tab, enter a topic, and generate practice quizzes
-5. **Practice Questions**: Use Questions tab to generate study questions
+```bash
+cd frontend
+python -m http.server 3000
+```
 
-## License
+Open:
 
-MIT License
+```text
+Frontend:
+http://localhost:3000
 
-## Contributing
+API Documentation:
+http://localhost:8000/docs
+```
 
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+---
+
+## 🔌 API Endpoints
+
+| Endpoint                  | Method | Description                 |
+| ------------------------- | ------ | --------------------------- |
+| `/health`                 | GET    | Check API health            |
+| `/api/upload`             | POST   | Upload study documents      |
+| `/api/kb/build`           | POST   | Build knowledge base        |
+| `/api/chat`               | POST   | Chat with AI                |
+| `/api/quiz/generate`      | POST   | Generate quiz               |
+| `/api/quiz/evaluate`      | POST   | Evaluate quiz               |
+| `/api/questions/generate` | POST   | Generate practice questions |
+
+---
+
+## 📚 How to Use
+
+### 1. Upload Study Materials
+
+Upload your PDF, DOCX, or TXT files through the document upload section.
+
+### 2. Build Knowledge Base
+
+Build the knowledge base so that the uploaded content can be converted into embeddings and stored in FAISS.
+
+### 3. Ask Questions
+
+Open the Chat section and ask questions related to your uploaded materials.
+
+### 4. Generate Quizzes
+
+Select a topic and generate an AI-powered quiz for practice.
+
+### 5. Generate Practice Questions
+
+Generate additional questions to test your understanding of the study material.
+
+---
+
+## 👨‍💻 My Contribution
+
+As part of this academic team project, I contributed to the development of the application across the major components of the system.
+
+### Frontend
+
+* Developed the user interface using HTML, CSS, and JavaScript.
+* Implemented document upload, chat, quiz, and question-generation interfaces.
+* Connected frontend functionality with backend APIs.
+
+### Backend
+
+* Worked with FastAPI to implement and integrate API endpoints.
+* Handled communication between the frontend, RAG pipeline, and AI services.
+
+### AI & RAG
+
+* Worked on the RAG pipeline for retrieving relevant information from uploaded documents.
+* Integrated text embeddings and FAISS vector search.
+* Integrated Google Gemini for AI-generated responses.
+
+### Document Processing
+
+* Worked with PDF, DOCX, and TXT document processing.
+* Implemented text extraction and chunking workflows.
+
+### Learning Features
+
+* Worked on quiz generation and evaluation.
+* Worked on practice-question generation.
+
+### Testing & Debugging
+
+* Tested application functionality across different components.
+* Debugged frontend, backend, API, and integration issues.
+
+---
+
+## 🎯 Key Learning Outcomes
+
+Through this project, I gained practical experience with:
+
+* Retrieval-Augmented Generation (RAG)
+* Large Language Model integration
+* Vector databases and semantic search
+* FastAPI backend development
+* REST API integration
+* Document processing
+* Text embeddings
+* Frontend and backend integration
+* AI-powered application development
+* Debugging and application testing
+
+---
+
+## 👥 Project Type
+
+**Academic Team Project**
+
+This project was developed as part of an academic project with team members.
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License.
